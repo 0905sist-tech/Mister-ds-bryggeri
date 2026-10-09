@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Label Editor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🍎%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Playfair+Display:wght@700&family=Bebas+Neue&family=Lobster&family=Abril+Fatface&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style id="pg"></style>
+<style>
+:root{--bg:#f4f4f0;--fg:#1c1c1a;--card:#fff;--line:#d8d8d0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1c1a;--fg:#ecece6;--card:#262724;--line:#3a3b37}}
+:root[data-theme="dark"]{--bg:#1b1c1a;--fg:#ecece6;--card:#262724;--line:#3a3b37}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 system-ui,sans-serif}
+.wrap{display:grid;grid-template-columns:330px 1fr;gap:18px;padding:14px;max-width:1400px;margin:auto}
+@media(max-width:880px){.wrap{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;align-self:start;max-height:calc(100vh - 28px);overflow:auto}
+@media(max-width:880px){.panel{max-height:none}}
+.panel h1{font-size:16px;margin:2px 0 8px}
+details{border-top:1px solid var(--line);padding:6px 0}
+summary{cursor:pointer;font-weight:600;padding:3px 0}
+label.f{display:block;font-size:12px;margin:7px 0 2px;opacity:.75}
+.panel input[type=text],.panel input:not([type]),.panel input[type=number],.panel select{width:100%;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit}
+input[type=color]{width:100%;height:30px;border:1px solid var(--line);border-radius:6px;background:var(--bg);padding:2px}
+input[type=range]{width:100%}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px}
+.chk{display:flex;gap:8px;align-items:center;margin-top:7px}
+.lr{display:grid;grid-template-columns:1fr 1fr 28px;gap:5px;margin-top:5px}
+.lr.i{grid-template-columns:48px 1fr 28px}
+button{padding:7px 10px;border:0;border-radius:7px;background:#0f3b2e;color:#fff;font:inherit;cursor:pointer}
+button.s2{background:var(--bg);color:var(--fg);border:1px solid var(--line)}
+.dz{margin-bottom:8px}
+button.x{padding:0;background:transparent;color:var(--fg);border:1px solid var(--line)}
+button.em{background:var(--bg);color:var(--fg);border:1px solid var(--line);font-size:17px;padding:3px 7px;margin:2px}
+.pal{margin-top:8px}.btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.hint{font-size:12px;opacity:.7;margin:4px 0}
+.sheet{display:flex;flex-direction:column;gap:14px;min-width:0}
+.lbl{--u:calc(1cqw*var(--fit,1));container-type:inline-size;width:min(100%,calc(var(--pw)*1.8));break-inside:avoid}
+.in{position:relative;background:var(--paper);border:calc(var(--u)*var(--bw)) solid var(--ink);border-radius:calc(var(--u)*var(--rad));padding:calc(var(--u)*3.3) calc(var(--u)*2.6) calc(var(--u)*2.8) calc(var(--u)*4.2);color:var(--ink);font-family:var(--bf);overflow:hidden;aspect-ratio:var(--ar);display:flex;flex-direction:column;justify-content:space-between}
+.top{display:flex;align-items:center;gap:calc(var(--u)*2);font-size:calc(var(--u)*2);letter-spacing:.15em;font-weight:600;min-height:calc(var(--u)*2.6)}
+.top i{flex:1;height:calc(var(--u)*.2);background:var(--ink)}
+.gap{width:calc(var(--u)*17)}
+.main{display:flex;align-items:center;gap:calc(var(--u)*2.6);margin-top:calc(var(--u)*1.2)}
+.logo{width:calc(var(--u)*var(--logo));height:calc(var(--u)*var(--logo));flex:none;object-fit:contain;border-radius:50%}
+.mt{min-width:0}
+.title{font-family:var(--tf);font-weight:400;font-size:calc(var(--u)*var(--ts));line-height:1.05;color:var(--ttl);margin:0}
+.sub{font-style:italic;color:var(--acc);font-size:calc(var(--u)*var(--ss));margin-top:calc(var(--u)*1)}
+.ings{display:flex;flex-wrap:wrap;align-items:center;gap:calc(var(--u)*.8) calc(var(--u)*1.8);margin-top:calc(var(--u)*1.4);font-size:calc(var(--u)*2)}
+.it{font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:calc(var(--u)*1.6)}
+.ing{display:inline-flex;gap:calc(var(--u)*.6);align-items:center;background:color-mix(in srgb,var(--ink) 9%,transparent);border-radius:calc(var(--u)*99);padding:calc(var(--u)*.3) calc(var(--u)*1.4)}
+.ing span:first-child{font-size:calc(var(--u)*2.6)}
+.rule{height:calc(var(--u)*.2);background:var(--ink);margin:calc(var(--u)*2.4) 0 calc(var(--u)*1.6)}
+.bot{display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--u)*3)}
+.facts{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1.2) calc(var(--u)*4.2)}
+.facts small{display:block;font-size:calc(var(--u)*1.6);letter-spacing:.1em;font-weight:600;text-transform:uppercase}
+.facts b{font-family:var(--tf);font-weight:400;font-size:calc(var(--u)*3.2)}
+.tag{font-style:italic;font-size:calc(var(--u)*1.5);color:var(--acc);text-align:right;max-width:calc(var(--u)*38);text-transform:uppercase;letter-spacing:.03em}
+.brand{position:absolute;top:calc(var(--u)*1.6);right:calc(var(--u)*2.4);font-style:italic;color:var(--acc);font-size:calc(var(--u)*1.7)}
+.stamp{position:absolute;top:calc(var(--u)*1.6);right:calc(var(--u)*3);width:calc(var(--u)*15);height:calc(var(--u)*15);border-radius:50%;background:color-mix(in srgb,var(--acc) 30%,transparent);border:calc(var(--u)*.25) solid var(--acc);display:flex;align-items:center;justify-content:center;text-align:center;font-size:calc(var(--u)*2);color:var(--acc);padding:calc(var(--u)*1);z-index:2}
+@media screen{[contenteditable]:hover{outline:1px dashed rgba(128,128,128,.7);outline-offset:2px;cursor:text}[contenteditable]:empty::before{content:"…";opacity:.4}}
+@media print{
+ body{background:#fff}.panel{display:none}.wrap{display:block;padding:0}
+ .sheet{gap:6mm}.lbl{width:var(--pw)}.in{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="panel" id="panel">
+  <h1>Edit label</h1><div class="hint">Click any text on the label to edit it. The preview is enlarged; it prints at the exact mm size you set. Label length = bottle circumference (diameter × π) + glue overlap, so it wraps all the way around. Diameters are my estimates; measure your bottle and adjust.</div>
+  <div class="dz"><label class="f">Saved designs (every change saves automatically)</label>
+  <select id="dsel"></select>
+  <label class="f">Design name</label><input type="text" id="dname">
+  <div class="btns"><button id="dnew">+ New (copy of this)</button><button class="s2" id="ddel">Delete</button></div>
+  <div class="btns"><button class="s2" id="dexp">Export file</button><button class="s2" id="dimp">Import file</button><input type="file" id="dfile" accept=".json,application/json" hidden></div></div>
+  <div id="secs"></div>
+  <div class="hint" id="pinfo"></div><div class="btns"><button onclick="window.print()">Print / PDF</button><button class="x" style="width:auto;padding:7px 10px" id="reset">Reset all</button></div>
+ </div>
+ <div class="sheet" id="sheet"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DEF_LOGO='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#f6f3e8" stroke="#1a1a1a" stroke-width="3"/><circle cx="50" cy="50" r="42" fill="none" stroke="#c9a24a" stroke-width="4"/><ellipse cx="50" cy="28" rx="10" ry="13" fill="#1a1a1a"/><text x="50" y="55" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="13" fill="#1a1a1a">MISTERÖDS</text><text x="50" y="68" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#1a1a1a">BRYGGERI</text><text x="50" y="82" text-anchor="middle" font-size="9" fill="#c9a24a">★</text></svg>');
+const DEFAULTS=()=>({cat:'CIDER',title:'Misteröds Äppelcider',sub:'Bryggd av Herr-Röd',brand:'Misteröds Bryggeri',tag:'Öppnas med respekt. Trycket är det enda som är kontrollerat här.',ingTitle:'Innehåll',stampText:'Batch 3',
+ facts:[{l:'Årgång',v:'2026'},{l:'Alkohol',v:'~7 %'},{l:'Volym',v:'50 cl'},{l:'Sats',v:'Nr 3'}],
+ ings:[{e:'🍎',t:'Äpplen'},{e:'🍬',t:'Socker'}],
+ paper:'#f6f3e8',ink:'#0b3b2c',ttl:'#0a2a20',acc:'#8c1a3a',
+ tf:"'Alfa Slab One',Rockwell,Georgia,serif",bf:"'Source Serif 4',Georgia,serif",ts:6.6,ss:2.4,bw:.5,rad:1.6,logoSize:11.5,
+ showCat:true,showBrand:true,showLogo:true,showRule:true,showStamp:false,n:2,size:'50',dia:65,ov:5,pw:209,ph:70,pap:'auto',logo:DEF_LOGO});
+let S=DEFAULTS(),D={active:'d1',items:{d1:{name:'Design 1',s:{}}}};
+try{const j=localStorage.getItem('misterods-designs-v1'),o=localStorage.getItem('misterods-label-v2');
+ if(j)D=JSON.parse(j);else if(o)D.items.d1.s=JSON.parse(o)}catch(e){}
+if(!D.items||!D.items[D.active])D={active:'d1',items:{d1:{name:'Design 1',s:{}}}};
+function load(id){D.active=id;S=Object.assign(DEFAULTS(),D.items[id].s)}
+load(D.active);
+const TF=[["'Alfa Slab One',Rockwell,Georgia,serif",'Alfa Slab (bold slab)'],["'Playfair Display',Georgia,serif",'Playfair (elegant)'],["'Bebas Neue',Impact,sans-serif",'Bebas (tall caps)'],["'Lobster',cursive",'Lobster (script)'],["'Abril Fatface',Georgia,serif",'Abril (fat serif)'],["'Source Serif 4',Georgia,serif",'Source Serif'],["'Inter',system-ui,sans-serif",'Inter (clean)']];
+const BF=[["'Source Serif 4',Georgia,serif",'Source Serif'],["'Playfair Display',Georgia,serif",'Playfair'],["'Inter',system-ui,sans-serif",'Inter'],["Georgia,serif",'Georgia'],["'Courier New',monospace",'Typewriter']];
+const SPEC=[
+['Texts',true,[['cat','Category (top left)','text'],['title','Name','text'],['sub','Subtitle','text'],['brand','Brand (top right)','text'],['tag','Small print','text'],['ingTitle','Ingredients heading','text'],['showCat','Show category','check'],['showBrand','Show brand','check'],['showRule','Show dividing lines','check']]],
+['Facts (year, ABV, volume…)',true,'facts'],
+['Ingredients (apples, sugar…)',true,'ings'],
+['Colors',false,[['preset','Color theme','preset'],['paper','Background','color'],['ink','Text & lines','color'],['ttl','Title','color'],['acc','Accent','color']]],
+['Fonts & sizes',false,[['tf','Title font','select',TF],['bf','Body font','select',BF],['ts','Title size','range',3,10,.1],['ss','Subtitle size','range',1.2,5,.1]]],
+['Frame, logo & stamp',false,[['bw','Border width','range',0,2,.1],['rad','Corner radius','range',0,6,.1],['showLogo','Show logo','check'],['logoSize','Logo size','range',6,22,.5],['logoUp','Upload logo','file'],['showStamp','Show circle / sticker','check'],['stampText','Circle text','text']]],
+['Label size & sheet',true,[['size','Bottle size','size'],['dia','Bottle diameter (mm)','num'],['ov','Glue overlap (mm)','num'],['pw','Label length (mm) = around the bottle','num'],['ph','Label height (mm)','num'],['pap','Paper','select',[['auto','Auto (lies down if needed)'],['a4p','A4 portrait'],['a4l','A4 landscape'],['a3l','A3 landscape']]],['n','Labels on sheet','select',[1,2,3,4,5,6].map(x=>[x,x])]]]
+];
+const SIZES=[['50','50 cl bottle',65,70],['150','150 cl bottle',85,100],['200','200 cl bottle',100,120],['custom','Custom size']];
+const PAP={a4p:'A4 portrait',a4l:'A4 landscape',a3l:'A3 landscape'};
+const paperKey=()=>S.pap==='auto'?(S.pw<=194?'a4p':S.pw<=281?'a4l':'a3l'):S.pap;
+const PRESETS=[['Skog (green/cream)','#f6f3e8','#0b3b2c','#0a2a20','#8c1a3a'],['Mörk natt','#14211c','#e8dfc4','#f3e9c9','#e0a33a'],['Äpplerött','#fbefe6','#7a1020','#5a0a16','#2f5d3a'],['Hav (blue)','#eef3f6','#123a5c','#0b2540','#c4572d'],['Svartvit','#ffffff','#111111','#000000','#555555'],['Custom']];
+const EMO=[['🍎','Äpplen'],['🍏','Gröna äpplen'],['🍐','Päron'],['🍯','Honung'],['🍬','Socker'],['🍋','Citron'],['🍊','Apelsin'],['🌿','Humle'],['🌾','Jäst'],['🍒','Körsbär'],['🍓','Jordgubbar'],['🫐','Blåbär'],['🍇','Druvor'],['🍑','Persika'],['🫚','Ingefära'],['🌶️','Chili'],['💧','Vatten'],['🍂','Kanel']];
+function field(f){const [k,l,t,a,b,c]=f;
+ if(t==='check')return `<label class="chk"><input type="checkbox" data-k="${k}"> ${l}</label>`;
+ let inp='';
+ if(t==='text')inp=`<input type="text" data-k="${k}">`;
+ else if(t==='color')inp=`<input type="color" data-k="${k}">`;
+ else if(t==='num')inp=`<input type="number" data-k="${k}" min="30" max="1000">`;
+ else if(t==='range')inp=`<input type="range" data-k="${k}" min="${a}" max="${b}" step="${c}">`;
+ else if(t==='select')inp=`<select data-k="${k}">${a.map(o=>`<option value="${esc(o[0])}">${o[1]}</option>`).join('')}</select>`;
+ else if(t==='preset')inp=`<select id="preset">${PRESETS.map((p,i)=>`<option value="${i}">${p[0]}</option>`).join('')}</select>`;
+ else if(t==='size')inp=`<select id="size">${SIZES.map(z=>`<option value="${z[0]}">${z[1]}</option>`).join('')}</select>`;
+ else if(t==='file')inp=`<input type="file" id="logoUp" accept="image/*">`;
+ return `<div><label class="f">${l}</label>${inp}</div>`}
+$('secs').innerHTML=SPEC.map(([n,o,c])=>`<details ${o?'open':''}><summary>${n}</summary>`+(c==='facts'?`<div id="facts"></div><div class="btns"><button data-add="facts">+ Add fact</button></div>`:c==='ings'?`<div id="ings"></div><div class="hint">Quick add:</div><div class="pal">${EMO.map((e,i)=>`<button class="em" data-ei="${i}" title="${e[1]}">${e[0]}</button>`).join('')}</div><div class="btns"><button data-add="ings">+ Custom ingredient</button></div>`:`<div class="g2">${c.map(field).join('')}</div>`)+`</details>`).join('');
+const read=t=>t.type==='checkbox'?t.checked:(t.type==='range'||t.type==='number'||t.dataset.k==='n')?+t.value:t.value;
+function syncPanel(){$('size').value=S.size;document.querySelectorAll('.panel [data-k]').forEach(t=>{const v=S[t.dataset.k];if(t.type==='checkbox')t.checked=!!v;else t.value=v});
+ const m=PRESETS.findIndex(p=>p[1]===S.paper&&p[2]===S.ink&&p[3]===S.ttl&&p[4]===S.acc);$('preset').value=m<0?5:m}
+function lists(){
+ $('facts').innerHTML=S.facts.map((f,i)=>`<div class="lr"><input data-a="facts" data-i="${i}" data-p="l" value="${esc(f.l)}"><input data-a="facts" data-i="${i}" data-p="v" value="${esc(f.v)}"><button class="x" data-del="facts" data-i="${i}">✕</button></div>`).join('');
+ $('ings').innerHTML=S.ings.map((f,i)=>`<div class="lr i"><input data-a="ings" data-i="${i}" data-p="e" value="${esc(f.e)}"><input data-a="ings" data-i="${i}" data-p="t" value="${esc(f.t)}"><button class="x" data-del="ings" data-i="${i}">✕</button></div>`).join('')}
+const ce=x=>`contenteditable="true" spellcheck="false" ${x}`,K=k=>ce(`data-k="${k}"`),A=(a,i,p)=>ce(`data-a="${a}" data-i="${i}" data-p="${p}"`);
+function label(){
+ const ings=S.ings.length?`<div class="ings">${S.ingTitle!==''?`<span class="it" ${K('ingTitle')}>${esc(S.ingTitle)}</span>`:''}${S.ings.map((x,i)=>`<span class="ing"><span ${A('ings',i,'e')}>${esc(x.e)}</span><span ${A('ings',i,'t')}>${esc(x.t)}</span></span>`).join('')}</div>`:'';
+ const facts=S.facts.map((x,i)=>`<div><small ${A('facts',i,'l')}>${esc(x.l)}</small><b ${A('facts',i,'v')}>${esc(x.v)}</b></div>`).join('');
+ return `<div class="lbl"><div class="in">
+ ${S.showStamp?`<div class="stamp"><span ${K('stampText')}>${esc(S.stampText)}</span></div>`:''}
+ ${S.showBrand?`<div class="brand" ${K('brand')}>${esc(S.brand)}</div>`:''}
+ <div class="top">${S.showCat?`<span ${K('cat')}>${esc(S.cat)}</span>`:''}${S.showRule?'<i></i>':'<span style="flex:1"></span>'}${S.showBrand||S.showStamp?'<span class="gap"></span>':''}</div>
+ <div class="main">${S.showLogo?`<img class="logo" src="${S.logo}" alt="">`:''}<div class="mt"><h2 class="title" ${K('title')}>${esc(S.title)}</h2><div class="sub" ${K('sub')}>${esc(S.sub)}</div>${ings}</div></div>
+ ${S.showRule?'<div class="rule"></div>':'<div style="height:calc(var(--u)*2.4)"></div>'}
+ <div class="bot"><div class="facts">${facts}</div><div class="tag" ${K('tag')}>${esc(S.tag)}</div></div></div></div>`}
+function save(){D.items[D.active].s=S;try{localStorage.setItem('misterods-designs-v1',JSON.stringify(D))}catch(e){}}
+function draw(){const s=$('sheet').style;
+ [['paper',S.paper],['ink',S.ink],['ttl',S.ttl],['acc',S.acc],['tf',S.tf],['bf',S.bf],['ts',S.ts],['ss',S.ss],['bw',S.bw],['rad',S.rad],['logo',S.logoSize],['pw',S.pw+'mm'],['ar',S.pw+'/'+S.ph]].forEach(([k,v])=>s.setProperty('--'+k,v));
+ const pk=paperKey(),cap={a4p:194,a4l:281,a3l:404}[pk];$('pg').textContent=`@page{size:${PAP[pk]};margin:8mm}`;$('pinfo').innerHTML=`Prints on <b>${PAP[pk]}</b> (label length ${S.pw} mm). Print at 100% / “Actual size”.`+(S.pw>cap?' <b style="color:#c0392b">Label is longer than the paper – choose a bigger paper.</b>':'');
+ $('sheet').innerHTML=label().repeat(S.n);save();fit()}
+function fit(){const first=document.querySelector('.lbl');if(!first)return;const inn=first.firstElementChild;let f=1;
+ for(let i=0;i<6;i++){first.style.setProperty('--fit',f);const h=inn.clientHeight,c=inn.scrollHeight;if(c-h<=1)break;f=Math.max(.3,f*h/c*.98)}
+ document.querySelectorAll('.lbl').forEach(l=>l.style.setProperty('--fit',f))}
+document.addEventListener('input',()=>requestAnimationFrame(fit));
+if(document.fonts)document.fonts.ready.then(fit);
+window.addEventListener('load',fit);
+document.addEventListener('input',e=>{const t=e.target,d=t.dataset;
+ if(t.isContentEditable){const x=t.textContent;
+  if(d.k){S[d.k]=x;const p=document.querySelector(`.panel [data-k="${d.k}"]`);if(p)p.value=x;document.querySelectorAll(`.lbl [data-k="${d.k}"]`).forEach(o=>{if(o!==t)o.textContent=x})}
+  else if(d.a){S[d.a][d.i][d.p]=x;const p=document.querySelector(`.panel [data-a="${d.a}"][data-i="${d.i}"][data-p="${d.p}"]`);if(p)p.value=x;document.querySelectorAll(`.lbl [data-a="${d.a}"][data-i="${d.i}"][data-p="${d.p}"]`).forEach(o=>{if(o!==t)o.textContent=x})}
+  save();return}
+ if(!t.closest('.panel'))return;
+ if(d.a){const x=t.value;S[d.a][d.i][d.p]=x;document.querySelectorAll(`.lbl [data-a="${d.a}"][data-i="${d.i}"][data-p="${d.p}"]`).forEach(o=>o.textContent=x);save();return}
+ if(d.k){S[d.k]=read(t);if(['pw','ph','dia','ov'].includes(d.k)){S.size='custom';$('size').value='custom';if(d.k==='dia'||d.k==='ov')S.pw=Math.round(S.dia*Math.PI+S.ov);if(d.k==='pw')S.dia=Math.round((S.pw-S.ov)/Math.PI);['pw','dia'].forEach(x=>{if(x!==d.k)document.querySelector(`.panel [data-k="${x}"]`).value=S[x]})}if(['paper','ink','ttl','acc'].includes(d.k))syncPanel();draw()}});
+document.addEventListener('keydown',e=>{if(e.target.isContentEditable&&e.key==='Enter')e.preventDefault()});
+document.addEventListener('change',e=>{const t=e.target;
+ if(t.id==='size'&&t.value!=='custom'){const z=SIZES.find(x=>x[0]===t.value);S.size=z[0];S.dia=z[2];S.ph=z[3];S.pw=Math.round(S.dia*Math.PI+S.ov);const f=S.facts.find(x=>/volym|volume/i.test(x.l));if(f)f.v=z[0]+' cl';syncPanel();lists();draw()}
+ if(t.id==='preset'){const p=PRESETS[+t.value];if(p.length>1){[S.paper,S.ink,S.ttl,S.acc]=p.slice(1);syncPanel();draw()}}
+ if(t.id==='logoUp'&&t.files[0]){const r=new FileReader();r.onload=()=>{S.logo=r.result;S.showLogo=true;syncPanel();draw()};r.readAsDataURL(t.files[0])}});
+document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;const d=t.dataset;
+ if(d.del){S[d.del].splice(+d.i,1);lists();draw()}
+ else if(d.add==='facts'){S.facts.push({l:'Label',v:'Value'});lists();draw()}
+ else if(d.add==='ings'){S.ings.push({e:'✨',t:'Ingredient'});lists();draw()}
+ else if(d.ei){const x=EMO[+d.ei];S.ings.push({e:x[0],t:x[1]});lists();draw()}
+ else if(t.id==='reset'){if(confirm('Reset everything to the original label?')){S=DEFAULTS();syncPanel();lists();draw()}}});
+function dlist(){$('dsel').innerHTML=Object.entries(D.items).map(([id,x])=>`<option value="${id}">${esc(x.name)}</option>`).join('');$('dsel').value=D.active;$('dname').value=D.items[D.active].name}
+function swap(id){save();load(id);syncPanel();lists();dlist();draw()}
+function addDesign(name,st){const id='d'+Date.now();D.items[id]={name,s:JSON.parse(JSON.stringify(st))};swap(id)}
+$('dsel').addEventListener('change',e=>swap(e.target.value));
+$('dname').addEventListener('input',e=>{D.items[D.active].name=e.target.value||'Untitled';const o=$('dsel').selectedOptions[0];if(o)o.textContent=D.items[D.active].name;save()});
+$('dnew').addEventListener('click',()=>addDesign(D.items[D.active].name+' copy',S));
+let armed=0;
+$('ddel').addEventListener('click',e=>{const ids=Object.keys(D.items);
+ if(ids.length<2){e.target.textContent='Need at least 2';setTimeout(()=>e.target.textContent='Delete',1800);return}
+ if(!armed){armed=1;e.target.textContent='Click again to delete';setTimeout(()=>{armed=0;e.target.textContent='Delete'},2500);return}
+ armed=0;e.target.textContent='Delete';delete D.items[D.active];load(Object.keys(D.items)[0]);syncPanel();lists();dlist();draw()});
+$('dexp').addEventListener('click',()=>{const n=D.items[D.active].name;const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([JSON.stringify({name:n,s:S})],{type:'application/json'}));
+ a.download=(n.replace(/[^\w\-åäöÅÄÖ ]+/g,'').trim()||'label')+'.label.json';document.body.appendChild(a);a.click();a.remove()});
+$('dimp').addEventListener('click',()=>$('dfile').click());
+$('dfile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+ r.onload=()=>{try{const j=JSON.parse(r.result),st=j.s||j;if(typeof st!=='object'||!st.title&&!st.facts)throw 0;addDesign(j.name||f.name.replace(/\.json$/,''),st)}catch(x){alert('That file is not a label design.')}e.target.value=''};r.readAsText(f)});
+syncPanel();lists();dlist();draw();
+</script>
+</body>
+</html>
